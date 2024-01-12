@@ -1,0 +1,28 @@
+---
+- name: Config Ubuntu Server
+  hosts: all
+  become: yes
+
+  tasks:
+
+  - name: Install firewall
+    apt:
+      name: ufw
+      state: present
+
+  - name: Start Firewall Service
+    service:
+      name: ufw
+      state: started
+      enabled: yes
+  
+  - name: Allow SSH via Firewall
+    ufw:
+      rule: allow
+      name: OpenSSH
+    
+  - name: Copy file from local to remote
+    copy:
+      src: files/note01.txt
+      dest: /home/jay
+      mode: 0644

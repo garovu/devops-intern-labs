@@ -1,0 +1,12 @@
+
+---
+- name: Set up SSH for Ubuntu server
+  hosts: all 
+  become: yes
+
+  tasks:
+    - name: Generate SSH key
+      ansible.builtin.openssh_keypair:
+        path: /home/jay/.ssh/id_rsa
+        type: rsa
+        size: 2048

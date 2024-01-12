@@ -1,0 +1,32 @@
+---
+- name: Deploy Small Flask App with docker
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Copy source code file to remote host
+      copy:
+        src: files/small-flask-app
+        dest: /home/jay/app
+        
+    # - name: Build image  
+    #   docker_image:
+    #     build:
+    #       path: /home/jay/app/small-flask-app
+    #     name: small-flask-app
+    #     tag: v1
+    #     source: build
+
+    - name: Pull Docker image
+      docker_image:
+        name: garovu/small-flask-app
+        source: pull
+
+    - name: Run Docker container
+      docker_container:
+        name: small-flask-app
+        image: garovu/small-flask-app
+        ports:
+          - "5001:5000"
+        state: started
+    

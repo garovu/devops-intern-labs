@@ -1,0 +1,38 @@
+
+---
+- name: Install Docker and manage containers
+  hosts: all 
+  become: yes
+
+  tasks:
+    - name: Install required packages
+      apt:
+        name:
+          - apt-transport-https
+          - ca-certificates
+          - curl
+          - gnupg-agent
+          - software-properties-common
+        state: present
+      when: ansible_os_family == 'Debian'
+
+    - name: Add Docker GPG key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+      when: ansible_os_family == 'Debian'
+
+    - name: Add Docker repository
+      apt_repository: #use for arm64 chipset
+        repo: deb [arch=arm64] https://download.docker.com/linux/ubuntu jammy stable
+        state: present
+      when: ansible_os_family == 'Debian'
+
+    - name: Install Docker
+      apt:
+        name: 
+          - docker-ce
+          - docker-ce-cli
+          - containerd.io
+        state: present
+      when: ansible_os_family == 'Debian'
+
