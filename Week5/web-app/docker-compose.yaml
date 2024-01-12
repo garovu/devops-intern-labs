@@ -13,6 +13,7 @@ services:
       - "MINIO_ROOT_USER=user"
       - "MINIO_ROOT_PASSWORD=password"
     command: server /data --console-address :9001
+  
   createbucket:
     image: minio/mc:latest
     depends_on:
