@@ -1,0 +1,17 @@
+---
+- hosts: all
+  become: yes
+
+  tasks:
+  - name: Ping my hosts
+    ansible.builtin.ping:
+
+  - name: Print message
+    ansible.builtin.debug:
+      msg: Hello world
+
+  - name: Install neofetch
+    apt:
+      name: neofetch
+      state: present
+  
