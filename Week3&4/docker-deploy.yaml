@@ -5,12 +5,12 @@
 
   tasks:
     - name: Copy source code file to remote host
-      copy:
+      ansible.builtin.copy:
         src: files/small-flask-app
         dest: /home/jay/app
         
     # - name: Build image  
-    #   docker_image:
+    #   ansible.builtin.docker_image::
     #     build:
     #       path: /home/jay/app/small-flask-app
     #     name: small-flask-app
@@ -18,12 +18,12 @@
     #     source: build
 
     - name: Pull Docker image
-      docker_image:
+      ansible.builtin.docker_image:
         name: garovu/small-flask-app
         source: pull
 
     - name: Run Docker container
-      docker_container:
+      ansible.builtin.docker_container:
         name: small-flask-app
         image: garovu/small-flask-app
         ports:

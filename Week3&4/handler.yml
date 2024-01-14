@@ -1,0 +1,36 @@
+---
+- name: Verify apache installation
+  hosts: all
+  become: true
+  remote_user: root
+
+  tasks:
+    - name: Ensure apache is at the latest version
+      ansible.builtin.apt:
+        name: apache2
+        state: present
+
+    - name: Write the apache config file
+      ansible.builtin.template:
+        src: files/templates/test.j2
+        dest: /etc/apache2/sites-available/test.conf
+        mode: preserve
+      notify: # call a handlers
+        - Restart apache
+        - "restart firewall"
+
+    - name: Ensure apache is running
+      ansible.builtin.service:
+        name: apache2
+        state: started
+
+  handlers:
+    - name: Restart apache
+      ansible.builtin.service:
+        name: apache2
+        state: restarted
+
+    - name: Restart ufw
+      ansible.builtin.debug:
+        msg: "Restart firewall sucessfull."
+      listen: "restart firewall"

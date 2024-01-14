@@ -1,17 +1,35 @@
 ---
-- hosts: all
-  become: yes
-
+- name: My First Playbook
+  hosts: all
   tasks:
-  - name: Ping my hosts
-    ansible.builtin.ping:
+    - name: Ping my hosts
+      ansible.builtin.ping:
 
-  - name: Print message
-    ansible.builtin.debug:
-      msg: Hello world
+    - name: Print message through dedug modune
+      ansible.builtin.debug:
+        msg: Hello world
 
-  - name: Install neofetch
-    apt:
-      name: neofetch
-      state: present
-  
+    - name: Install and run service in block
+      when: ansible_facts["distribution"] == "Ubuntu"
+      become: true # just use sudo for task in this block
+      block:
+        - name: Install some packages
+          ansible.builtin.apt:
+            name:
+              - neofetch
+              - ufw
+            state: latest
+        - name: Active service
+          ansible.builtin.service:
+            name: ufw
+            state: started
+            enabled: true
+      rescue:
+        - name: Rescue block
+          ansible.builtin.debug:
+            msg: "error"
+          when: ansible_failed_task.name != "Install some packages"
+      always:
+        - name: Always block
+          ansible.builtin.debug:
+            msg: "finish"

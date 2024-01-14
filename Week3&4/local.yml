@@ -1,0 +1,13 @@
+---
+- hosts: 127.0.0.1 # localhost ip
+  connection: local
+
+  tasks:
+  - name: Hello Local
+    ansible.builtin.debug:
+      msg: "Hello local"
+
+  - name: Copy files to local machine
+    ansible.builtin.copy:
+      src: files/note01.txt
+      dest: ~/

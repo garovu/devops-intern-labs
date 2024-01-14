@@ -1,9 +1,14 @@
 ---
 - name: Write hostname
   hosts: all
+  become: true
 
   tasks:
-  - name: write hostname using jinja2
-    ansible.builtin.template:
-       src: files/templates/test.j2
-       dest: /home/jay/msg.txt
+    - name: Check user home directory
+      ansible.builtin.debug:
+        var: ansible_facts.env.PWD
+
+    - name: Write hostname using jinja2
+      ansible.builtin.template:
+        src: files/templates/test.j2
+        dest: '{{ ansible_facts.env.PWD }}/msg.txt'

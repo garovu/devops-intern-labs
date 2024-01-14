@@ -1,0 +1,30 @@
+---
+- name: All about ansible_facts
+  hosts: all
+  
+  tasks:
+  - name: Get all ansible_facts
+    ansible.builtin.debug:
+      var: ansible_facts
+
+  - name: Get distribution
+    ansible.builtin.debug:
+      var: ansible_facts["distribution"]
+
+  - name: Check distribution_major_version for testing with When condition.
+    ansible.builtin.debug:
+      var: ansible_facts["distribution"] == "22"
+
+  - name: When conditions using ansible_facts
+    ansible.builtin.debug:
+      msg: "Hello from {{ ansible_facts.hostname }} is running {{ ansible_facts.os_family }}"
+    when: 
+      - ansible_facts.distribution == "Ubuntu" # AND logic
+      - ansible_facts["distribution_major_version"] == "11" #22 for true
+
+
+  - name: More When conditions using ansible_facts
+    ansible.builtin.debug:
+      msg: "Hello from {{ ansible_facts.hostname }} is running Ubuntu or CentOS"
+    when: (ansible_facts['distribution'] == "CentOS" or ansible_facts['distribution'] == "Ubuntu")
+      
