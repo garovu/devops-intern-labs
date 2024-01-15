@@ -1,0 +1,9 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: nfs-storage-class
+provisioner: mannual # need to install provisioner
+parameters:
+  server: 192.168.67.9
+  path: /var/nfs/k8s
+  readOnly: "false"
