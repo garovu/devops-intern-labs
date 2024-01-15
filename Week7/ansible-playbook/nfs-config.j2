@@ -1,0 +1,6 @@
+
+# To connect NFS server from MacOS
+# Set the 'insecure', 'all-squash', 'anonuid' and 'anongid' options in the /etc/exports file
+# Use the full 'nfs://[server-IP]/path/nfs_share_dir' path in Finder's Connect to Server
+
+{{ nfs_share_dir }}	{{ subnet_ip }}(rw,all_squash,sync,no_subtree_check,anonuid=65534,anongid=65534,insecure)

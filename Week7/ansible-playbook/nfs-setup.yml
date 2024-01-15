@@ -1,0 +1,43 @@
+---
+- name: Set up a NFS server in ubuntu
+  hosts: all
+  become: true
+
+  vars:
+    subnet_ip: 192.168.67.0/24
+    nfs_share_dir: /var/nfs/k8s
+
+  tasks:
+    - name: Install nfs-kernel-server
+      ansible.builtin.apt:
+        name: nfs-kernel-server
+        state: present
+
+    - name: Create share dicrectory
+      ansible.builtin.file:
+        path: /var/nfs/k8s
+        state: directory
+        mode: '0777'
+
+    - name: Change ownership of a directory
+      ansible.builtin.file:
+        path: /var/nfs/k8s
+        state: directory
+        recurse: true
+        owner: nobody
+        group: nogroup
+
+    - name: Config the NFS
+      ansible.builtin.template:
+        src: nfs-config.j2
+        dest: /etc/exports
+        owner: root
+        group: root
+        mode: '0644'
+      notify: Restart nfs-kernel-server service
+
+  handlers:
+    - name: Restart nfs-kernel-server service
+      ansible.builtin.service:
+        name: nfs-kernel-server
+        state: restarted
