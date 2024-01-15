@@ -1,4 +1,0 @@
----
-- name: First
-  hosts: cisco
-  connection: local

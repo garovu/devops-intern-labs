@@ -18,7 +18,7 @@
             name:
               - neofetch
               - ufw
-            state: latest
+            state: present
         - name: Active service
           ansible.builtin.service:
             name: ufw

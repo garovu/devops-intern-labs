@@ -3,12 +3,15 @@
   hosts: all
   become: true
 
+
   tasks:
     - name: Check user home directory
       ansible.builtin.debug:
         var: ansible_facts.env.PWD
+      # debugger: always
 
     - name: Write hostname using jinja2
       ansible.builtin.template:
         src: files/templates/test.j2
         dest: '{{ ansible_facts.env.PWD }}/msg.txt'
+        mode: preserve

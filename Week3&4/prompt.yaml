@@ -1,0 +1,19 @@
+---
+- name: Prompt asking
+  hosts: all
+
+  vars_prompt:
+    - name: username
+      prompt: What is your username?
+      private: false
+      default: user
+    - name: password
+      prompt: What is your password?
+      private: true
+      encrypt: md5_crypt
+
+  tasks:
+
+    - name: Print a message
+      ansible.builtin.debug:
+        msg: "Logging in as {{ username }} - {{ password }}."
