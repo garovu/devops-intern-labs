@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels: 
+      app: django-minio
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 300
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        app: django-minio
+    spec:
+      containers:
+      - name: django
+        image: garovu/django-minio
+        envFrom:
+          - configMapRef:
+              name: web-app-config
+        ports:
+        - containerPort: 8000
+        resources: 
+          limits:
+            memory: "1024Mi"
+            cpu: "1000m"
+            
