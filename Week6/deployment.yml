@@ -5,7 +5,7 @@ metadata:
 spec:
   replicas: 2
   selector:
-    matchLabels:
+    matchLabels: 
       app: web-app
   revisionHistoryLimit: 5
   progressDeadlineSeconds: 300
@@ -22,6 +22,11 @@ spec:
     spec:
       containers:
       - name: hello-ctr
-        image: nigelpoulton/k8sbook:1.0
+        image: busybox
         ports:
         - containerPort: 8080
+        resources: 
+          limits:
+            memory: "512Mi"
+            cpu: "1000m"
+            

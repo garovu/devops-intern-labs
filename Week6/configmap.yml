@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: first-cm
+data:
+  key1: value1
+  key2: value2
+  fruits.json: |
+    {
+    "fruit": "Banana",
+    "size": "Large",
+    "color": "Red"
+    }
+  
