@@ -1,98 +1,54 @@
 # Default values for minio.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
+namespace: minio-dev
 
-replicaCount: 1
-
+# Deloyment 
 image:
-  repository: nginx
+  repository: quay.io/minio/minio
+  tag: latest
   pullPolicy: IfNotPresent
-  # Overrides the image tag whose default is the chart appVersion.
-  tag: ""
 
-imagePullSecrets: []
-nameOverride: ""
-fullnameOverride: ""
+limits:
+  memory: "2024Mi"
+  cpu: "2000m"
 
-serviceAccount:
-  # Specifies whether a service account should be created
-  create: true
-  # Automatically mount a ServiceAccount's API credentials?
-  automount: true
-  # Annotations to add to the service account
-  annotations: {}
-  # The name of the service account to use.
-  # If not set and create is true, a name is generated using the fullname template
-  name: ""
+command:
+  - /bin/bash
+  - -c
 
-podAnnotations: {}
-podLabels: {}
+args:
+  - minio server /data --console-address :9090
 
-podSecurityContext: {}
-  # fsGroup: 2000
+volumeMounts:
+  - mountPath: /data
+    name: localvolume
 
-securityContext: {}
-  # capabilities:
-  #   drop:
-  #   - ALL
-  # readOnlyRootFilesystem: true
-  # runAsNonRoot: true
-  # runAsUser: 1000
+volumes:
+  - name: localvolume
+    persistentVolumeClaim:
+      claimName: minio-pvc
 
+# Service
 service:
-  type: ClusterIP
-  port: 80
+  type: NodePort
+  port: 9090
+  nodePort: 30001
+  targetPort: 9090
 
-ingress:
-  enabled: false
-  className: ""
-  annotations: {}
-    # kubernetes.io/ingress.class: nginx
-    # kubernetes.io/tls-acme: "true"
-  hosts:
-    - host: chart-example.local
-      paths:
-        - path: /
-          pathType: ImplementationSpecific
-  tls: []
-  #  - secretName: chart-example-tls
-  #    hosts:
-  #      - chart-example.local
+# Persistent Volume Claim
+persistenceClaim:
+  storage: 1024Mi
+  volumeMode: Filesystem
+  storageClassName: ""
+  accessModes: ReadWriteOnce
 
-resources: {}
-  # We usually recommend not to specify default resources and to leave this as a conscious
-  # choice for the user. This also increases chances charts run on environments with little
-  # resources, such as Minikube. If you do want to specify resources, uncomment the following
-  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
-  # limits:
-  #   cpu: 100m
-  #   memory: 128Mi
-  # requests:
-  #   cpu: 100m
-  #   memory: 128Mi
-
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 100
-  targetCPUUtilizationPercentage: 80
-  # targetMemoryUtilizationPercentage: 80
-
-# Additional volumes on the output Deployment definition.
-volumes: []
-# - name: foo
-#   secret:
-#     secretName: mysecret
-#     optional: false
-
-# Additional volumeMounts on the output Deployment definition.
-volumeMounts: []
-# - name: foo
-#   mountPath: "/etc/foo"
-#   readOnly: true
-
-nodeSelector: {}
-
-tolerations: []
-
-affinity: {}
+# Persistent Volume 
+persistence:
+  storage: 1024Mi
+  volumeMode: Filesystem
+  accessModes: ReadWriteOnce
+  persistentVolumeReclaimPolicy: Recycle
+  nfs: # NFS server detail
+    path: /var/nfs/k8s
+    server: 192.168.67.9

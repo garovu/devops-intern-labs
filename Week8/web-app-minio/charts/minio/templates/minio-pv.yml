@@ -1,15 +1,17 @@
 apiVersion: v1
 kind: PersistentVolume
 metadata:
-  name: minio-pv
+  name: "{{ include "minio.name" . }}-pv"
 spec:
   capacity:
-    storage: 1024Mi
-  volumeMode: Filesystem
+    storage: {{ .Values.persistence.storage }}
+  volumeMode: {{ .Values.persistence.volumeMode }}
+  persistentVolumeReclaimPolicy: {{ .Values.persistence.persistentVolumeReclaimPolicy }}
+  storageClassName: ""
   accessModes:
     - ReadWriteOnce
-  storageClassName: ""
-  persistentVolumeReclaimPolicy: Recycle
   nfs:
-    path: /var/nfs/k8s
-    server: 192.168.67.9
+    path: {{ .Values.persistence.nfs.path }}
+    server: {{ .Values.persistence.nfs.server }}
+
+

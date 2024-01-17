@@ -1,14 +1,17 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: minio-pvc
-  namespace: minio-dev
+  name: "{{ include "minio.name" . }}-pvc"
+  namespace: {{ .Values.namespace }}
+  labels:
+    {{- include "minio.labels" . | nindent 4 }}
 spec:
   resources:
     requests:
-      storage: 1000Mi
-  volumeMode: Filesystem
+      storage: {{ .Values.persistenceClaim.storage }}
+  volumeMode: {{ .Values.persistenceClaim.volumeMode }}
   storageClassName: ""
-  volumeName: minio-pv # Specific PV to PVC connect
   accessModes:
     - ReadWriteOnce
+  volumeName: "{{ include "minio.name" . }}-pv"
+

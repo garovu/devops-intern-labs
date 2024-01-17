@@ -8,28 +8,35 @@
 apiVersion: v1
 kind: Pod
 metadata:
+  name: {{ include "minio.name" . }}
+  namespace: {{ .Values.namespace }}
   labels:
-    app: minio
-  name: minio
-  namespace: minio-dev # Change this value to match the namespace metadata.name
+    {{- include "minio.labels" . | nindent 4 }}
 spec:
   containers:
-  - name: minio
-    image: quay.io/minio/minio:latest
+  - name: {{ .Chart.Name }}
+    image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+    pullPolicy: {{ .Values.pullPolicy }}
     resources:
       limits:
-        memory: "2048Mi"
-        cpu: "2000m"
-    command:
-    - /bin/bash
-    - -c
-    args: 
-    - minio server /data --console-address :9090
-    volumeMounts:
-    - mountPath: /data
-      name: localvolume
+        memory: {{ .Values.limits.memory }}
+        cpu: {{ .Values.limits.cpu }}
     
+    {{- with .Values.command }}
+    command:
+      {{- toYaml . | nindent 6 -}}
+    {{- end -}}
+
+    {{- with .Values.args }}
+    args:
+      {{- toYaml . | nindent 6 -}}
+    {{- end -}}
+
+    {{- with .Values.volumeMounts }}
+    volumeMounts:
+      {{- toYaml . | nindent 6 -}}
+    {{- end -}}
+  {{- with .Values.volumes }}
   volumes:
-  - name: localvolume
-    persistentVolumeClaim:
-      claimName: minio-pvc
+    {{- toYaml . | nindent 4 -}}
+  {{- end -}}
