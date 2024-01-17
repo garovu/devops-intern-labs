@@ -1,0 +1,9 @@
+dependencies:
+- name: minio
+  repository: ""
+  version: 13.0.3
+- name: mongodb
+  repository: ""
+  version: 14.5.1
+digest: sha256:bc6afbf47625894eca611e3cbacecfef71cb895fe6f0a50a282e0b35feaa393b
+generated: "2024-01-17T10:30:37.874676+07:00"
