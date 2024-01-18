@@ -23,7 +23,7 @@ spec:
       containers:
       - name: {{ .Chart.Name }}
         image: "{{ .Values.image.repository }}:{{ .Values.image.tag}}"
-        pullPolicy: IfNotPresent
+        pullPolicy: Always
         envFrom:
           - configMapRef:
               name: "{{ include "web-app-minio.name" . }}-cm"
