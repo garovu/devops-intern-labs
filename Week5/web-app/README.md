@@ -9,7 +9,7 @@ Place your Docker network gateway IP in `.env`. And spin up the docker container
 ```
 docker network inspect bridge
 docker-compose up
-```
+```w
 
 ### Tear down
 
