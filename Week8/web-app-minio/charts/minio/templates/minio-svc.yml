@@ -6,8 +6,8 @@ metadata:
 spec:
   type: {{ .Values.service.type }}
   ports:
-    - port: {{ .Values.service.port }}
-      nodePort: {{ .Values.service.nodePort }}
+    - name: cluster
+      port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.targetPort }}
   selector:
     {{- include "minio.selectorLabels" . | nindent 4 -}}

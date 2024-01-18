@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: "{{ include "web-app-minio.name" . }}-cm"
+data:
+  MINIO_ACCESS_KEY_ID: {{ .Values.configMap.MINIO_ACCESS_KEY_ID }}
+  MINIO_SECRET_ACCESS_KEY: {{ .Values.configMap.MINIO_SECRET_ACCESS_KEY }}
+  MINIO_STORAGE_BUCKET_NAME: {{ .Values.configMap.MINIO_STORAGE_BUCKET_NAME }}
+  MINIO_API: "http://minio.{{ .Values.namespace }}.svc.cluster.local:9000"

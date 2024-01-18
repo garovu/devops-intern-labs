@@ -14,29 +14,31 @@ metadata:
     {{- include "minio.labels" . | nindent 4 }}
 spec:
   containers:
-  - name: {{ .Chart.Name }}
-    image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
-    pullPolicy: {{ .Values.pullPolicy }}
-    resources:
-      limits:
-        memory: {{ .Values.limits.memory }}
-        cpu: {{ .Values.limits.cpu }}
-    
-    {{- with .Values.command }}
-    command:
-      {{- toYaml . | nindent 6 -}}
-    {{- end -}}
+    - name: {{ .Chart.Name }}
+      image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+      pullPolicy: {{ .Values.image.pullPolicy }}
+      resources:
+        limits:
+          memory: {{ .Values.limits.memory }}
+          cpu: {{ .Values.limits.cpu }}
+      envFrom:
+        - configMapRef:
+            name: "{{ include "minio.name" . }}-cm"
 
-    {{- with .Values.args }}
-    args:
-      {{- toYaml . | nindent 6 -}}
-    {{- end -}}
+      {{- with .Values.command }}
+      command:
+        {{- toYaml . | nindent 8 -}}
+      {{- end -}}
 
-    {{- with .Values.volumeMounts }}
-    volumeMounts:
-      {{- toYaml . | nindent 6 -}}
-    {{- end -}}
-  {{- with .Values.volumes }}
+      {{- with .Values.args }}
+      args:
+        {{- toYaml . | nindent 8 -}}
+      {{- end -}}
+      {{- with .Values.volumeMounts }}
+      volumeMounts:
+        {{- toYaml . | nindent 8 -}}
+      {{- end -}}
+    {{- with .Values.volumes }}
   volumes:
-    {{- toYaml . | nindent 4 -}}
+    {{- toYaml . | nindent 6 -}}
   {{- end -}}

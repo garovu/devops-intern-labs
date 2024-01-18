@@ -1,7 +1,7 @@
 # Default values for minio.
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
-namespace: minio-dev
+namespace: default
 
 # Deloyment 
 image:
@@ -31,10 +31,14 @@ volumes:
 
 # Service
 service:
-  type: NodePort
-  port: 9090
-  nodePort: 30001
-  targetPort: 9090
+  type: ClusterIP
+  port: 9000
+  targetPort: 9000
+
+minioport:
+  port: 9000
+  nodePort: 30021
+  targetPort: 9000
 
 # Persistent Volume Claim
 persistenceClaim:
@@ -52,3 +56,8 @@ persistence:
   nfs: # NFS server detail
     path: /var/nfs/k8s
     server: 192.168.67.9
+
+# Config Map
+config:
+  MINIO_ROOT_USER: user
+  MINIO_ROOT_PASSWORD: password

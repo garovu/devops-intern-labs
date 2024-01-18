@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "web-app-minio.name" . }}
+spec:
+  replicas: {{ .Values.replicas }}
+  selector:
+    matchLabels: 
+      {{- include "web-app-minio.selectorLabels" . | nindent 6 }}
+  revisionHistoryLimit: 5
+  progressDeadlineSeconds: 300
+  minReadySeconds: 10
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
+  template:
+    metadata:
+      labels:
+        {{- include "web-app-minio.labels" . | nindent 8 }}
+    spec:
+      containers:
+      - name: {{ .Chart.Name }}
+        image: "{{ .Values.image.repository }}:{{ .Values.image.tag}}"
+        pullPolicy: IfNotPresent
+        envFrom:
+          - configMapRef:
+              name: "{{ include "web-app-minio.name" . }}-cm"
+        ports:
+        - containerPort: {{ .Values.containerPort }}
+        resources: 
+          limits:
+            memory: {{ .Values.limits.memory }}
+            cpu: {{ .Values.limits.cpu }}
+            
