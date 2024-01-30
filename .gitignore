@@ -29,3 +29,8 @@ Temporary Items
 .vscode
 Documents
 Week9/tls.*
+
+charts/*/charts
+/*/charts
+/*/*/charts
+/*/*/*/charts

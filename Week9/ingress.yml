@@ -9,7 +9,7 @@ spec:
     secretName: web-app-tls
   rules:
   - host: web-app.com
-    http:
+    http: 
       paths:
       - path: /
         pathType: Prefix

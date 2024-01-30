@@ -12,20 +12,10 @@ kubectl create secret tls web-app-tls --cert=tls.crt --key=tls.key
 ```
 
 ##### Connect from MacOS to Minikube Ingress Addons
-<<<<<<< HEAD
-=======
-# Install via Homebrew
-$ brew install chipmk/tap/docker-mac-net-connect
-
-# Run the service and register it to launch at boot
-$ sudo brew services start chipmk/tap/docker-mac-net-connect
->>>>>>> 776c692 (Add guide for connect Minikube Ingress to MacOS)
-
 ```
 # Install via Homebrew
 $ brew install chipmk/tap/docker-mac-net-connect
 
 # Run the service and register it to launch at boot
 $ sudo brew services start chipmk/tap/docker-mac-net-connect
-
 ```
