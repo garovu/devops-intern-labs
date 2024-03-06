@@ -1,2 +1,1 @@
-pymongo
-flask
+Flask==2.0.2

@@ -31,7 +31,5 @@ Documents
 Week9/tls.*
 
 # Helm charts directories
-charts/*
-Week8/**/charts/** 
-Week8/**/charts/**
-Week8/first-chart/charts
+Week8/first-chart/charts/**
+Week8/web-app-minio/charts
