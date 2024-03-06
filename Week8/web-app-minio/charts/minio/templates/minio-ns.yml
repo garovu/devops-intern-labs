@@ -1,9 +1,0 @@
-# Deploys a new Namespace for the MinIO Pod
-{{- if ne .Values.namespace "default" -}}
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: {{ .Values.namespace }}
-  labels:
-    {{- include "minio.labels" . | nindent 4 -}}
-{{- end -}}
