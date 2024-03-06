@@ -30,7 +30,8 @@ Temporary Items
 Documents
 Week9/tls.*
 
-charts/*/charts
-/*/charts
-/*/*/charts
-/*/*/*/charts
+# Helm charts directories
+charts/*
+Week8/**/charts/** 
+Week8/**/charts/**
+Week8/first-chart/charts
