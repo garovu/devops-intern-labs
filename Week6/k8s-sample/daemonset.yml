@@ -1,26 +1,25 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: web-app-daemonset
-  namespace: default
+  name: first-daemonset
   labels:
     env: dev
 spec:
   selector:
     matchLabels:
-      name: web-app
+      name: monitoring
   template:
     metadata:
       labels:
-        name: web-app
+        name: monitoring
     spec:
       containers:
-      - name: hello-ctr
-        image: busybox
-        volumeMounts:
-        - name: varlog
-          mountPath: /var/log
+        - name: busybox-container
+          image: busybox
+          volumeMounts:
+            - name: varlog
+              mountPath: /var/log
       volumes:
-      - name: varlog
-        hostPath:
-          path: /var/log
+        - name: varlog
+          hostPath:
+            path: /var/log

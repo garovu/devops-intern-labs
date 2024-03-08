@@ -1,11 +1,11 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: web-app-deployment
+  name: first-deployment
 spec:
   replicas: 2
   selector:
-    matchLabels: 
+    matchLabels:
       app: web-app
   revisionHistoryLimit: 5
   progressDeadlineSeconds: 300
@@ -20,13 +20,19 @@ spec:
       labels:
         app: web-app
     spec:
+      volumes:
+        - name: data-volume
+          hostPath:
+            path: /data
       containers:
-      - name: hello-ctr
-        image: busybox
-        ports:
-        - containerPort: 8080
-        resources: 
-          limits:
-            memory: "512Mi"
-            cpu: "1000m"
-            
+        - name: busybox-container
+          image: busybox
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              memory: "512Mi"
+              cpu: "1000m"
+          volumeMounts:
+            - name: data-volume
+              mountPath: /data

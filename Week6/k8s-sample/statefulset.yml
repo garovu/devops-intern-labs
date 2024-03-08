@@ -1,32 +1,44 @@
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: mystatefulset
+  name: first-statefulset
 spec:
   selector:
     matchLabels:
-      app: myapp
-  serviceName: <ServiceName>
-  replicas: 2
+      app: statefull-app
+  serviceName: headless-service
+  replicas: 3
   template:
     metadata:
       labels:
-        app: myapp
+        app: statefull-app
     spec:
       containers:
-      - name: myapp
-        image: registry.k8s.io/nginx-slim:0.8
-        ports:
-        - containerPort: 80
-          name: web
-        volumeMounts:
-        - name: www
-          mountPath: /usr/share/nginx/html
+        - name: nginx-container
+          image: nginx
+          ports:
+            - name: http-port
+              containerPort: 80
+          volumeMounts:
+            - name: www
+              mountPath: /usr/share/nginx/html
   volumeClaimTemplates:
-  - metadata:
-      name: www
-    spec:
-      accessModes: [ "ReadWriteOnce" ]
-      resources:
-        requests:
-          storage: 1Gi
+    - metadata:
+        name: www
+      spec:
+        accessModes: ["ReadWriteOnce"]
+        resources:
+          requests:
+            storage: 1Gi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: headless-service
+spec:
+  clusterIP: None
+  selector:
+    app: statefull-app
+  ports:
+    - port: 80
+      targetPort: http-port

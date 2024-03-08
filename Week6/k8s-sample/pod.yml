@@ -9,29 +9,31 @@ metadata:
     zone: dev
 spec:
   containers:
-  - name: tool-kit 
-    image: busybox
-    command: 
-      - sleep
-      - "3600"
-    volumeMounts:
-      - name: fruits
-        mountPath: /mnt
-        readOnly: true
-    ports:
-    - containerPort: 8080
-    resources:
-      requests:
-        memory: "128Mi"
-        cpu: "500m"
-      limits:
-        memory: "512Mi"
-        cpu: "1000m"
+    - name: busybox-container
+      image: busybox
+      command:
+        - sleep
+        - "3600"
+      volumeMounts:
+        - name: fruits
+          mountPath: /mnt
+          readOnly: true
+      envFrom:
+        - secretRef:
+            name: api-key
+      ports:
+        - containerPort: 8080
+      resources:
+        requests:
+          memory: "128Mi"
+          cpu: "500m"
+        limits:
+          memory: "512Mi"
+          cpu: "1000m"
   volumes:
     - name: fruits
       configMap:
-        name: first-cm
+        name: first-configmap
         items:
           - key: fruits.json
             path: data.json
-        

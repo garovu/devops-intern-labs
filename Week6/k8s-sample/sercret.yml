@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Secret
 metadata:
-  name: mysecret
+  name: first-secret
 type: Opaque
 data:
-  password: <Password>
+  apiKey: c2VjcmV0cGFzc3dvcmQ=

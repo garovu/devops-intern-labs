@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: first-cm
+  name: first-configmap
 data:
-  key1: value1
-  key2: value2
+  username: dontusedefault
+  key2: stupidpassword
   fruits.json: |
     {
     "fruit": "Banana",
